@@ -137,7 +137,7 @@
     .form-container input[type="radio"]:checked + img {
         content: "";
         display: inline-block;
-        background-image: url('event.jpg');
+        background-image: url('/event.jpg');
         background-size: cover;
         cursor: pointer;
     }
