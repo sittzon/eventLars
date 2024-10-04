@@ -1,0 +1,28 @@
+version: ‘3.3’
+services:
+  client:
+    image: eventlars.client
+    build:
+      context: .
+      dockerfile: ./Dockerfile.client
+    ports:
+      - 5173:5173
+      - 4173:4173
+    # volumes:
+    #   - .:/code
+    depends_on:
+      - server
+    container_name: eventlars.client
+
+  server:
+    image: eventlars.db
+    mem_limit: 4g
+    build:
+      context: .
+      dockerfile: ./Dockerfile.server
+    ports:
+      - 5000:5000
+      - 5001:5001
+      - 8000:8000
+      - 8080:8080
+    container_name: eventlars.db

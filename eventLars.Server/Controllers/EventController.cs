@@ -32,7 +32,9 @@ public class EventController : ControllerBase
         foreach(var currentFile in fileInfos) {
             var bytes = System.IO.File.ReadAllBytes(currentFile.FullName);
             var e = JsonSerializer.Deserialize<Event>(bytes);
-            allEvents.Add(e);
+            if (e != null) {
+                allEvents.Add(e);
+            }
         }
 
         return allEvents;
@@ -82,7 +84,7 @@ public class EventController : ControllerBase
         
         var fileName = dataRoot + e.Guid.ToString() + ".json";
         if (System.IO.File.Exists(fileName)) {
-            return null;
+            return BadRequest("Event already exist");
         }
         
         System.IO.File.WriteAllText(fileName, JsonSerializer.Serialize(e));
@@ -100,7 +102,7 @@ public class EventController : ControllerBase
 
         // Cannot parse string to guid
         if (!Guid.TryParse(guid, out _)) {
-            return null;
+            return BadRequest(ModelState);
         }
 
         // No traversing the filesystem I said!
@@ -134,6 +136,10 @@ public class EventController : ControllerBase
 
         var bytes = System.IO.File.ReadAllBytes(fileName);
         var e = JsonSerializer.Deserialize<Event>(bytes);
+
+        if (e == null) {
+            return BadRequest(ModelState);
+        }
 
         // Create Answer array if not exists
         if (e.Answers == null) {
@@ -173,7 +179,7 @@ public class EventController : ControllerBase
         var bytes = System.IO.File.ReadAllBytes(fileName);
         var e = JsonSerializer.Deserialize<Event>(bytes);
 
-        if (e.Answers == null || e.Answers.Count() <= 0 || e.Dates == null) {
+        if (e == null || e.Answers == null || e.Answers.Count() <= 0 || e.Dates == null) {
             return null;
         }
 

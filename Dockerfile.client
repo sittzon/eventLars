@@ -1,0 +1,14 @@
+FROM node AS clientbuild
+
+WORKDIR /app
+COPY /eventLars.Client/package.json .
+RUN npm install
+
+COPY /eventLars.Client/src ./
+COPY /eventLars.Client/static .
+
+RUN npm run build
+
+EXPOSE 4173 5173
+
+ENTRYPOINT ["npm", "run preview"]
