@@ -8,7 +8,7 @@ namespace eventLars.Server.Controllers;
 [Route("[controller]")]
 public class EventController : ControllerBase
 {
-    private static readonly string dataRoot = @"";
+    private static readonly string dataRoot = @"/app/events/";
     private static readonly string eventsFileName = dataRoot + @"events.json";
     private readonly ILogger<Event> _logger;
 

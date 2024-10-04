@@ -13,6 +13,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 WORKDIR /app
 COPY --from=serverbuild /app/out ./
 
-EXPOSE 5000 5001 8080 5173
+EXPOSE 7216
+ENV ASPNETCORE_URLS=http://*:7216
 
 ENTRYPOINT ["dotnet", "/app/eventLars.Server.dll"]

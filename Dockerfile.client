@@ -4,11 +4,15 @@ WORKDIR /app
 COPY /eventLars.Client/package.json .
 RUN npm install
 
-COPY /eventLars.Client/src ./
-COPY /eventLars.Client/static .
+COPY /eventLars.Client/src/ ./src
+COPY /eventLars.Client/static/ ./static
+COPY /eventLars.Client/svelte.config.js .
+COPY /eventLars.Client/tsconfig.json .
+COPY /eventLars.Client/vite.config.ts .
+# COPY /eventLars.Client/.svelte-kit/ .
 
 RUN npm run build
 
 EXPOSE 4173 5173
 
-ENTRYPOINT ["npm", "run preview"]
+ENTRYPOINT ["npm", "run", "host"]
