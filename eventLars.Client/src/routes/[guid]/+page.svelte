@@ -10,18 +10,26 @@
 
     onMount(async () =>
     {
-        // Fetch metadata
-        const api = new Api();
-        api.baseUrl = config.apiEndpoint;
-        const response = await api.event.eventDetail(data.guid);
-        
-        if (response.status == 200)
-        {
-            event = response.data;
-        }
+        const dbEvent = "/api/event/" + data.guid;
+
+        const request = fetch(dbEvent, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json'
+            }
+        });
+        await request.then((response) => {
+            if (response.status == 200)
+            {
+                return response.json();
+            }
+        }).then((data) => {
+            event = data;
+        });
     });
 
     async function submitForm() {
+        // Collect all answers
         const formName = document.getElementById('formName') as HTMLInputElement;
         if (!formName || !event.dates || !event.guid) {
             return;
@@ -48,21 +56,30 @@
             return;
         }
 
-        const api = new Api();
-        api.baseUrl = config.apiEndpoint;
-        const response = await api.event.eventCreate2(event.guid, {answers: allAnswers, name: formName.value});
+        // Post to svelte backend
+        const dbPost = "/api/event/" + data.guid;
+        const name = formName.value;
 
-        if (response.status == 200)
-        {
-            window.location.href = '/thanks';
-        } else {
-            errorText = "Nåt gick fel, försök igen!"
-        }
+        const request = fetch(dbPost, {
+			method: 'POST',
+			body: JSON.stringify({ allAnswers, name }),
+			headers: {
+				'content-type': 'application/json'
+			}
+        });
+        await request.then((response) => {
+            if (response.status == 200)
+            {
+                window.location.href = '/thanks';
+            }
+        });
     }
 </script>
 
 {#if !event}
-    <p><em>Laddar...</em></p>
+    <div style="display:flex; flex-direction:column; align-items: center; text-align: center">
+        <p><em>Laddar...</em></p>
+    </div>
 {:else}
 <div style="display:flex; flex-direction:column; align-items: center; text-align: center">
     <h1 style="margin-top: 8rem">

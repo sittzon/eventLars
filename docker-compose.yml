@@ -5,18 +5,34 @@ services:
       context: .
       dockerfile: ./Dockerfile.client
     ports:
-      - 4173:4173
       - 5173:5173
     depends_on:
       - server
+    container_name: eventlars.client
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
 
   server:
-    image: eventlars.db
+    image: eventlars.server
     mem_limit: 4g
     build:
       context: .
       dockerfile: ./Dockerfile.server
     ports:
-      - 7216:7216
+      - 7216:443
     volumes:
       - .:/app/events
+      #macOS or Linux; Use %USERPROFILE% instead of {HOME} on Windows
+      - ${HOME}/.aspnet/https:/https/
+    container_name: eventlars.server
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=7216
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+
+networks: 
+  default: 
+    name: traefik 
+    external: true

@@ -15,7 +15,6 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins(website).AllowAnyHeader().AllowAnyMethod();
         }
-        policy.AllowAnyHeader().AllowAnyMethod();
     });
 });
 
@@ -24,6 +23,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseHttpsRedirection();
 app.UseCors(WebsiteClientOrigin);
 app.MapControllers();
 app.Run();

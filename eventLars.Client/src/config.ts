@@ -1,4 +1,4 @@
 export const config =
 {
-    apiEndpoint: "http://localhost:7216"
+    apiEndpoint: "https://server:443"
 };

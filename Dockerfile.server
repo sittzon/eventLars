@@ -14,6 +14,6 @@ WORKDIR /app
 COPY --from=serverbuild /app/out ./
 
 EXPOSE 7216
-ENV ASPNETCORE_URLS=http://*:7216
+ENV ASPNETCORE_URLS=https://*:7216
 
 ENTRYPOINT ["dotnet", "/app/eventLars.Server.dll"]

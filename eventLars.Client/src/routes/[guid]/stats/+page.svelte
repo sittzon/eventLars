@@ -10,25 +10,45 @@
 
     onMount(async () =>
     {
-        const api = new Api();
-        api.baseUrl = config.apiEndpoint;
-        let response = await api.event.eventDetail(data.guid);
-        
-        if (response.status == 200)
-        {
-            event = response.data;
-        }
+        const dbEvent = "/api/event/" + data.guid ;
+        const dbStats = "/api/event/" + data.guid + "/stats";
 
-        response = await api.event.statsDetail(data.guid);
-        if (response.status == 200)
-        {
-            stats = response.data;
-        }
+        let request = fetch(dbEvent, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json'
+            }
+        });
+        await request.then((response) => {
+            if (response.status == 200)
+            {
+                return response.json();
+            }
+        }).then((data) => {
+            event = data;
+        });
+
+        request = fetch(dbStats, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json'
+            }
+        });
+        await request.then((response) => {
+            if (response.status == 200)
+            {
+                return response.json();
+            }
+        }).then((data) => {
+            stats = data;
+        });
     });
 </script>
 
 {#if !event}
-    <p><em>Laddar...</em></p>
+    <div style="display:flex; flex-direction:column; align-items: center; text-align: center">
+        <p><em>Laddar...</em></p>
+    </div>
 {:else}
 <div style="display:flex; flex-direction:column; align-items: center; text-align: center">
     <h1 style="margin-top: 8rem">
