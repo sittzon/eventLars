@@ -1,7 +1,8 @@
-FROM node:22-alpine AS clientbuild
+FROM node:23.3.0-bullseye AS clientbuild
 
 WORKDIR /app
 COPY /eventLars.Client/package.json .
+COPY /eventLars.Client/package-lock.json .
 RUN npm install
 
 COPY /eventLars.Client/src/ ./src
