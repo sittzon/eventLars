@@ -13,4 +13,7 @@ public class Stat
     public required int Yes { get; set; }
     public required int No { get; set; }
     public required int Maybe { get; set; }
+    public required IEnumerable<string> YesNames { get; set; }
+    public required IEnumerable<string> MaybeNames { get; set; }
+    public required IEnumerable<string> NoNames { get; set; }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using eventLars.Server.Models;
 using System.Text.Json;
+using System.Text;
 
 namespace eventLars.Server.Controllers;
 
@@ -37,6 +38,8 @@ public class EventController : ControllerBase
             }
         }
 
+        _logger.LogInformation("GET all events: Returning {count} events", allEvents.Count());
+
         return allEvents;
     }
 
@@ -59,6 +62,7 @@ public class EventController : ControllerBase
         }
 
         var bytes = System.IO.File.ReadAllBytes(fileName);
+        _logger.LogInformation("GET single event: Returning event {guid}", guid);
         return JsonSerializer.Deserialize<Event>(bytes);
     }
 
@@ -88,6 +92,7 @@ public class EventController : ControllerBase
         }
         
         System.IO.File.WriteAllText(fileName, JsonSerializer.Serialize(e));
+        _logger.LogInformation("POST event: Created event {guid}", e.Guid);
         return CreatedAtAction(nameof(PostEvent), new { id = e.Guid }, e);
     }
     
@@ -156,7 +161,8 @@ public class EventController : ControllerBase
 
         System.IO.File.WriteAllText(fileName, JsonSerializer.Serialize(e));
 
-        return Ok(new { message = "Form submitted successfully"});
+        _logger.LogInformation("POST event: Form submitted successfully");
+        return Ok(new { message = "Form submitted successfully" });
     }
 
     [HttpGet("{guid}/stats")]
@@ -187,23 +193,34 @@ public class EventController : ControllerBase
         var stats = new List<Stat>();
         foreach(var currentDate in e.Dates.Order()) {
             var date = currentDate;
-            var stat = new Stat() {
+            var yesDetail = new StringBuilder();
+            var maybeDetail = new StringBuilder();
+            var noDetail = new StringBuilder();
+            var stat = new Stat()
+            {
                 Date = currentDate,
                 Yes = 0,
                 Maybe = 0,
-                No = 0
+                No = 0,
+                YesNames = new List<string>(),
+                MaybeNames = new List<string>(),
+                NoNames = new List<string>()
             };
             foreach (var a in e.Answers) {
                 var name = a.Name;
                 foreach (var answer in a.Answers.Where(x => x.Date.Equals(date))) {
-                    if (answer.Yes.HasValue && answer.Yes.Value.Equals(true)) {
+                    if (answer.Yes.HasValue && answer.Yes.Value.Equals(true))
+                    {
                         stat.Yes += 1;
+                        stat.YesNames = stat.YesNames.Append(name);
                     }
                     if (answer.Maybe.HasValue && answer.Maybe.Value.Equals(true)) {
                         stat.Maybe += 1;
+                        stat.MaybeNames = stat.MaybeNames.Append(name);
                     }
                     if (answer.No.HasValue && answer.No.Value.Equals(true)) {
                         stat.No += 1;
+                        stat.NoNames = stat.NoNames.Append(name);
                     }
                 }
             }                
@@ -214,6 +231,8 @@ public class EventController : ControllerBase
             Guid = Guid.Parse(guid),
             DatesAndAnswers = stats
         };
+
+        _logger.LogInformation("GET stats: Returning stats for event {guid}", guid);
 
         return guidDatesAndStats;
     }

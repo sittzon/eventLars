@@ -42,7 +42,19 @@
         }).then((data) => {
             stats = data;
         });
+
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
     });
+
+  let openIndex: number | null = null; // track which date’s tooltip is open
+
+  // Close tooltip when clicking outside
+  function handleClickOutside(event: MouseEvent) {
+    if (!event.target.closest(".tooltip-container")) {
+      openIndex = null;
+    }
+  }
 </script>
 
 {#if !event}
@@ -62,7 +74,26 @@
         <div>Nej</div>
         {#if event.dates}
             {#each event.dates as date, index}
-                <b>{date}</b>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <div class="tooltip-container {openIndex === index ? 'active' : ''}"
+                on:click={() => openIndex = openIndex === index ? null : index}>
+                    <b>{date}</b>
+                    <div class="tooltip">
+                        {#if stats}
+                            <b>{date}</b>
+                            {#if stats.datesAndAnswers?.at(index)?.yesNames?.length > 0}
+                                <p><b>Ja:</b> {stats.datesAndAnswers?.at(index)?.yesNames.join(", ")}</p>
+                            {/if}
+                            {#if stats.datesAndAnswers?.at(index)?.maybeNames?.length > 0}
+                                <p><b>Kanske:</b> {stats.datesAndAnswers?.at(index)?.maybeNames.join(", ")}</p>
+                            {/if}
+                            {#if stats.datesAndAnswers?.at(index)?.noNames?.length > 0}
+                                <p><b>Nej:</b> {stats.datesAndAnswers?.at(index)?.noNames.join(", ")}</p>
+                            {/if}
+                        {/if}
+                    </div>
+                </div>
                 {#if stats}
                     <div>{stats.datesAndAnswers?.at(index)?.yes}</div>
                     <div>{stats.datesAndAnswers?.at(index)?.maybe}</div>
@@ -75,18 +106,49 @@
 
 <style>
     .form-container {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 0.5rem;
-      width: 100%;
-      max-width: 500px;
-      margin: 0.5rem auto;
-      padding: 1rem;
-      border-radius: 10px;
-      text-align: center;
-      align-items: center;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 0.5rem;
+        width: 100%;
+        max-width: 500px;
+        margin: 0.5rem auto;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        align-items: center;
     }
     .form-container div {
-      padding: 5px;
+        padding: 5px;
+    }
+    .tooltip-container {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        margin-right: 1rem;
+    }
+
+    .tooltip {
+        visibility: hidden;
+        opacity: 0;
+        width: 220px;
+        background-color: #333;
+        color: #fff;
+        text-align: left;
+        border-radius: 6px;
+        padding: 6px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* above the date */
+        left: 50%;
+        transform: translateX(-50%);
+        transition: opacity 0.2s;
+        pointer-events: none; /* prevents hover flicker */
+    }
+
+    .tooltip-container:hover .tooltip,
+    .tooltip-container.active .tooltip {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
     }
 </style>

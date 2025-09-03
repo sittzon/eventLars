@@ -46,6 +46,9 @@ export interface Stat {
   no?: number;
   /** @format int32 */
   maybe?: number;
+  yesNames?: string[] | null;
+  maybeNames?: string[] | null;
+  noNames?: string[] | null;
 }
 
 export interface Stats {

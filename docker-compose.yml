@@ -23,7 +23,7 @@ services:
     volumes:
       - .:/app/events
       #macOS or Linux; Use %USERPROFILE% instead of {HOME} on Windows
-      - ${HOME}/.aspnet/https:/https/
+      - ${HOME}/.aspnet/https:/https:ro
     container_name: eventlars.server
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS serverbuild
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS serverbuild
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN dotnet restore --disable-parallel
 COPY /eventLars.Server .
 RUN dotnet publish -c Release -o out --disable-parallel
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 
 WORKDIR /app
 COPY --from=serverbuild /app/out ./

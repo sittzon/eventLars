@@ -117,6 +117,7 @@
             <label for="formName">Namn</label>
             <input id="formName" name="formName" type="text">
             <input type="submit" value="Skicka in"/>
+            <a href="/{event.guid}/stats" style="grid-column: span 4; text-decoration: underline; cursor: pointer; color: blue; margin-top: 1rem">Se resultat</a>
         </div>
         <p style="text-align: center">{errorText}</p>
     </form>

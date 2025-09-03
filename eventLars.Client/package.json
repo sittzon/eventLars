@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"generate-api-classes": "npx tsx ./src/generateApiClasses.ts",
-		"dev": "vite dev",
+		"dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"host": "vite preview --host",
