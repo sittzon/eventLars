@@ -10,7 +10,6 @@ namespace eventLars.Server.Controllers;
 public class EventController : ControllerBase
 {
     private static readonly string dataRoot = @"/app/events/";
-    private static readonly string eventsFileName = dataRoot + @"events.json";
     private readonly ILogger<Event> _logger;
 
     public EventController(ILogger<Event> logger)

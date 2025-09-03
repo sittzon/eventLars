@@ -139,8 +139,8 @@
         position: absolute;
         z-index: 1;
         bottom: 125%; /* above the date */
-        left: 50%;
-        transform: translateX(-50%);
+        left: 90%;
+        transform: translateY(70%);
         transition: opacity 0.2s;
         pointer-events: none; /* prevents hover flicker */
     }
