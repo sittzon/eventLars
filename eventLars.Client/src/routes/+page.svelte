@@ -29,15 +29,18 @@
 </script>
 
 <div style="display:flex; flex-direction:column; align-items: center; text-align: center">
+    <h1 style="margin-top: 8rem">
+        Välkommen till EventLars!
+    </h1>
     {#if !eventList}
         <p><em>Laddar...</em></p>
     {:else}
-        <h1 style="margin-top: 8rem">
-            Välkommen till EventLars!
-        </h1>
+        <div style="margin-top: 2rem"/>
         <p>Vilket event vill du rösta på?</p>
         {#each eventList as event}
             <h2><a href="/{event.guid}">{event.title}</h2>
         {/each}
+        <div style="margin-top: 2rem"/>
+        <p>Eller vill du <a href="/create">skapa ett event</a>?</p>
     {/if}
 </div>

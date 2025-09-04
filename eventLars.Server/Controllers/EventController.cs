@@ -92,7 +92,7 @@ public class EventController : ControllerBase
         
         System.IO.File.WriteAllText(fileName, JsonSerializer.Serialize(e));
         _logger.LogInformation("POST event: Created event {guid}", e.Guid);
-        return CreatedAtAction(nameof(PostEvent), new { id = e.Guid }, e);
+        return CreatedAtAction(nameof(PostEvent), new { id = e.Guid }, new { guid = e.Guid });
     }
     
     [HttpPost("{guid}")]

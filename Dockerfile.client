@@ -1,4 +1,4 @@
-FROM node:23.3.0-bullseye AS clientbuild
+FROM node:23-slim AS clientbuild
 
 WORKDIR /app
 COPY /eventLars.Client/package.json .
