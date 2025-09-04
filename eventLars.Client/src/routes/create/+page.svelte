@@ -77,22 +77,22 @@
     .container {
         padding: 1rem 0 1rem;
         margin: 1rem 0 1rem;
-        max-width: 500px;
-        width: 100%;
+        max-width: 600px;
+        width: 100vw;
     }
     .form-group {
         display: grid;
         grid-template-columns: 1fr 2fr .3fr;
     }
     .form-group p {
-        margin: 0 1rem 0 1rem;
+        margin: 0 1rem 0 0;
         text-align: right;
     }
     .form-group:first-of-type input {
-        width: 300px;
+        width: 100%;
     }
     .form-group textarea {
-        width: 300px;
         height: 100px;
+        width: 100%;
     }
 </style>
