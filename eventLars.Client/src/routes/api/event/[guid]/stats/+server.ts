@@ -1,17 +1,9 @@
 import { error, json } from '@sveltejs/kit';
+import { type Stat } from "../../../../../api";
+import { env } from '$env/dynamic/private';
 import fs from 'fs/promises';
 
-const dataRoot = './events';
-
-class Stat {
-    date!: string;
-    yes!: number;
-    no!: number;
-    maybe!: number;
-    yesNames!: string[];
-    maybeNames!: string[];
-    noNames!: string[];
-}
+const dataRoot = env.EVENTS_ROOT || '/events';
 
 // Read stats for specific event and return contents
 export async function GET({params}) {
@@ -27,29 +19,30 @@ export async function GET({params}) {
         const stats: Stat[] = [];
 
         for (const currentDate of eventData.dates.sort()) {
-            const stat = new Stat();
-            stat.date = currentDate;
-            stat.yes = 0;
-            stat.maybe = 0;
-            stat.no = 0;
-            stat.yesNames = [];
-            stat.maybeNames = [];
-            stat.noNames = [];
+            var stat: Stat = {
+                date: currentDate,
+                yes: 0 as number,
+                maybe: 0 as number,
+                no: 0 as number,
+                yesNames: [] as string[],
+                maybeNames: [] as string[],
+                noNames: [] as string[]
+            };
 
             for (const a of eventData.answers) {
                 const name = a.name;
                 for (const answer of a.answers.filter((x: any) => x.date === currentDate)) {
                     if (answer.yes === true) {
-                        stat.yes += 1;
-                        stat.yesNames.push(name);
+                        stat.yes! += 1;
+                        stat.yesNames!.push(name);
                     }
                     if (answer.maybe === true) {
-                        stat.maybe += 1;
-                        stat.maybeNames.push(name);
+                        stat.maybe! += 1;
+                        stat.maybeNames!.push(name);
                     }
                     if (answer.no === true) {
-                        stat.no += 1;
-                        stat.noNames.push(name);
+                        stat.no! += 1;
+                        stat.noNames!.push(name);
                     }
                 }
             }

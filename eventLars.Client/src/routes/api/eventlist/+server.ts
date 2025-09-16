@@ -1,8 +1,9 @@
 import { error, json } from '@sveltejs/kit';
-import { Api, type Event } from "../../../api";
+import { type Event } from "../../../api";
+import { env } from '$env/dynamic/private';
 import fs from 'fs/promises';
 
-const dataRoot = './events';
+const dataRoot = env.EVENTS_ROOT || '/events';
 
 // Read all event files and return contents
 export async function GET() {

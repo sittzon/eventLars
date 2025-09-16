@@ -1,8 +1,9 @@
 import { error, json } from '@sveltejs/kit';
 import fs from 'fs/promises';
+import { env } from '$env/dynamic/private';
 import {v4 as uuidv4} from 'uuid';
 
-const dataRoot = './events';
+const dataRoot = env.EVENTS_ROOT || '/events';
 
 // Create new event and save
 export async function POST({request}) {
