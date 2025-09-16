@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { Api, type Event, type EventAnswer } from "../../api";
-    import { config } from "../../config";
+    import { type Event, type EventAnswer } from "../../api";
 	import type { PageData } from './$types';
 	export let data: PageData;
 

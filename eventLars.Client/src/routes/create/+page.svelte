@@ -1,8 +1,5 @@
 <script lang="ts">
-    import { json } from '@sveltejs/kit';
     import { onMount } from "svelte";
-    import { Api, type Event} from "../../api";
-    import { config } from "../../config";
 
     let eventTitle: string = "";
     let eventDescription: string = "";

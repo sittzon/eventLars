@@ -1,8 +1,6 @@
 <script lang="ts">
-    import { json } from '@sveltejs/kit';
     import { onMount } from "svelte";
-    import { Api, type Event} from "../api";
-    import { config } from "../config";
+    import { type Event} from "../api";
 
     let eventList: Event[];
 

@@ -1,20 +1,22 @@
 import { error, json } from '@sveltejs/kit';
 import { Api, type Event } from "../../../api";
-import { config } from "../../../config";
+import fs from 'fs/promises';
 
+const dataRoot = './events';
+
+// Read all event files and return contents
 export async function GET() {
-    const api = new Api();
-    api.baseUrl = config.apiEndpoint;
-
     try {
-        const response = await api.event.eventList();
-
-        if (response.status == 200) {
-            return json(response.data);
-        } else {
-            console.log("Failed to fetch data, status:", response.status);
-            return json([]);
+        const events: Event[] = [];
+        const eventFiles = (await fs.readdir(dataRoot+'/', 'utf-8'))
+            .filter(f => !f.startsWith('.'))
+            .filter(f => f.endsWith('.json'));
+        for (const file of eventFiles) {
+            const content = await fs.readFile(dataRoot + '/' + file, 'utf-8');
+            events.push(JSON.parse(content));
         }
+        console.log("GET eventlist: Returning event list: ", events.map(event => event.title + " : " + event.guid));
+        return json(events);
     } catch (error) {
         console.error("Error fetching event list:", error);
         return json([]);
