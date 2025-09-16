@@ -1,12 +1,11 @@
 services:
-  client:
-    image: eventlars.client
+  eventLars:
+    image: eventlars
     build:
       context: .
-      dockerfile: ./Dockerfile.client
+      dockerfile: ./Dockerfile
     ports:
       - 5173:5173
-    container_name: eventlars.client
     volumes:
       - ${EVENTS_ROOT}:/events
 
