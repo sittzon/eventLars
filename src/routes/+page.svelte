@@ -33,12 +33,14 @@
     {#if !eventList}
         <p><em>Laddar...</em></p>
     {:else}
-        <div style="margin-top: 2rem"/>
-        <p>Vilket event vill du rösta på?</p>
-        {#each eventList as event}
+        {#if eventList.length > 0}
+            <div style="margin-top: 2rem"/>
+            <p>Vilket event vill du rösta på?</p>
+            {#each eventList as event}
             <h2><a href="/{event.guid}">{event.title}</h2>
-        {/each}
+            {/each}
+        {/if}
         <div style="margin-top: 2rem"/>
-        <p>Eller vill du <a href="/create">skapa ett event</a>?</p>
+        <p>{#if eventList.length > 0}Eller vill{:else}Vill{/if} du <a href="/create">skapa ett event</a>?</p>
     {/if}
 </div>
